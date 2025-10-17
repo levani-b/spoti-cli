@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlencode, urlparse, parse_qs
 import requests
 import base64
 import json
@@ -27,24 +27,24 @@ def _get_auth_headers():
 def generate_auth_url():
     client_id = os.getenv("SPOTIFY_CLIENT_ID")
     redirect_uri = os.getenv("SPOTIFY_REDIRECT_URI")
-    scope = (
-        "user-read-playback-state "
-        "user-modify-playback-state "
-        "user-read-currently-playing "
-        "playlist-read-private "
-        "playlist-read-collaborative "
-        "user-library-read"
-    )
-    
-    auth_url = (
-        f"{SPOTIFY_AUTH_URL}?"
-        f"client_id={client_id}&"
-        f"response_type=code&"
-        f"redirect_uri={redirect_uri}&"
-        f"scope={scope}"
-    )
+    scopes = [
+    "user-read-playback-state",
+    "user-modify-playback-state",
+    "user-read-currently-playing",
+    "playlist-read-private",
+    "playlist-read-collaborative",
+    "user-library-read",
+]
 
-    return auth_url
+    params = {
+        "client_id": client_id,
+        "response_type": "code",
+        "redirect_uri": redirect_uri,
+        "scope": " ".join(scopes),
+    }
+
+    return f"{SPOTIFY_AUTH_URL}?{urlencode(params)}"
+
 
 
 def start_callback_server():
