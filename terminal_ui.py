@@ -59,3 +59,20 @@ def hide_cursor():
 
 def show_cursor():
     print(SHOW_CURSOR, end='')
+
+
+def print_track_info(track_data):
+    album_name = track_data["item"]["album"]["name"]
+    track_name = track_data["item"]["name"]
+    artist_name = track_data["item"]["artists"][0]["name"]
+
+    print('\nNow Playing:')
+    print(f"> {track_name}")
+    print(f'{artist_name} -> {album_name}')
+
+
+def print_menu(options):
+    print("\n" + "─" * 40)
+    for key, description in options.items():
+        print(f"[{key.upper()}] {description}")
+    print("─" * 40)

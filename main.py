@@ -1,11 +1,24 @@
 from spotify_auth import authenticate
 from spotify_api import get_current_track,play_track,pause_playback, resume_playback, skip_to_next, skip_to_previous, search_tracks
-from terminal_ui import clear_screen, move_cursor, hide_cursor, show_cursor
+from terminal_ui import clear_screen, move_cursor, hide_cursor, print_track_info, show_cursor, print_menu
 import time
+
+menu_options = {
+    'p': 'Play/Pause',
+    'n': 'Next track',
+    'b': 'Previous track',
+    's': 'Search',
+    'q': 'Quit'
+}
+
 
 
 def main():
-    clear_screen()
+    tokens = authenticate()
+    curr_track = get_current_track(tokens['access_token'])
+    print_track_info(curr_track)
+    print_menu(menu_options)
+    # clear_screen()
     # hide_cursor()
 
     # print("Line 1")
