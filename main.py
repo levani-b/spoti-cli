@@ -1,22 +1,31 @@
 from spotify_auth import authenticate
 from spotify_api import get_current_track,play_track,pause_playback, resume_playback, skip_to_next, skip_to_previous, search_tracks
+from terminal_ui import clear_screen, move_cursor, hide_cursor, show_cursor
+import time
 
 
 def main():
-    tokens = authenticate()
-    access_token = tokens['access_token']
+    clear_screen()
+    # hide_cursor()
 
-    # track = get_current_track(tokens['access_token'])
-    
-    # print(track)
-    # play_track(tokens['access_token'], "spotify:track:4iV5W9uYEdYUVa79Axb7Rh")
+    # print("Line 1")
+    # print("Line 2")
+    # print("Line 3")
 
-    # pause_playback(access_token)
-    # resume_playback(access_token)
-    # skip_to_next(access_token)
-    # skip_to_previous(access_token)
-    tracks = search_tracks(access_token, 'the beatles')
-    print(tracks)
+    # time.sleep(1)
+
+    # # Go back and update line 2
+    # move_cursor(2, 0)
+    # print("Line 2 CHANGED!")
+
+    # time.sleep(1)
+
+    # # Update line 1
+    # move_cursor(1, 0)
+    # print("Line 1 CHANGED!")
+
+    # time.sleep(2)
+    # show_cursor()
 
 if __name__ == "__main__":
     main()
