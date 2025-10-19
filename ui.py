@@ -20,6 +20,15 @@ UNDERLINE = "\033[4m"
 HIDE_CURSOR = "\033[?25l"
 SHOW_CURSOR = "\033[?25h"
 
+# menu options
+menu_options = {
+    'p': 'Play/Pause',
+    'n': 'Next track',
+    'b': 'Previous track',
+    'q': 'Quit'
+}
+
+
 def clear_screen():
     print(CLEAR, end='')
 
@@ -76,3 +85,7 @@ def print_menu(options):
     for key, description in options.items():
         print(f"[{key.upper()}] {description}")
     print("─" * 40)
+
+def get_user_input():
+    command = input("\nEnter command: ").lower().strip()
+    return command[0] if command else ''

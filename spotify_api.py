@@ -112,3 +112,17 @@ def search_tracks(access_token, query, limit=20):
         print(f"No results found for '{query}'")
     
     return tracks
+
+def toggle_playback(access_token):
+    track = get_current_track(access_token)
+    
+    if not track:
+        print("Nothing is playing")
+        return
+    
+    is_playing = track.get('is_playing', False)
+    
+    if is_playing:
+        pause_playback(access_token)
+    else:
+        resume_playback(access_token)

@@ -1,44 +1,37 @@
+import sys
 from spotify_auth import authenticate
-from spotify_api import get_current_track,play_track,pause_playback, resume_playback, skip_to_next, skip_to_previous, search_tracks
-from terminal_ui import clear_screen, move_cursor, hide_cursor, print_track_info, show_cursor, print_menu
+from spotify_api import *
+from ui import *
 import time
-
-menu_options = {
-    'p': 'Play/Pause',
-    'n': 'Next track',
-    'b': 'Previous track',
-    's': 'Search',
-    'q': 'Quit'
-}
-
 
 
 def main():
     tokens = authenticate()
-    curr_track = get_current_track(tokens['access_token'])
-    print_track_info(curr_track)
-    print_menu(menu_options)
-    # clear_screen()
-    # hide_cursor()
+    if not tokens:
+        sys.exit(1)
+    access_token = tokens['access_token']
 
-    # print("Line 1")
-    # print("Line 2")
-    # print("Line 3")
+    while True:
+        print(CLEAR, end = " ")
 
-    # time.sleep(1)
+        current = get_current_track(access_token)
 
-    # # Go back and update line 2
-    # move_cursor(2, 0)
-    # print("Line 2 CHANGED!")
+        print_track_info(current)
+        print_menu(menu_options)
 
-    # time.sleep(1)
+        command = get_user_input()
 
-    # # Update line 1
-    # move_cursor(1, 0)
-    # print("Line 1 CHANGED!")
+        if command == 'q':
+            break
+        elif command == 'p':
+            toggle_playback(access_token)
+        elif command == 'n':
+            skip_to_next(access_token)
+        elif command == 'b':
+            skip_to_previous(access_token)
 
-    # time.sleep(2)
-    # show_cursor()
+        time.sleep(1)
+
 
 if __name__ == "__main__":
     main()
