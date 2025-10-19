@@ -1,3 +1,5 @@
+from spotify_api import search_tracks, play_track
+
 # ANSI escape codes
 CLEAR = "\033[2J\033[H"
 
@@ -25,7 +27,9 @@ menu_options = {
     'p': 'Play/Pause',
     'n': 'Next track',
     'b': 'Previous track',
-    'q': 'Quit'
+    's': 'Search',
+    'q': 'Quit',
+
 }
 
 
@@ -89,3 +93,44 @@ def print_menu(options):
 def get_user_input():
     command = input("\nEnter command: ").lower().strip()
     return command[0] if command else ''
+
+    
+def search_mode(access_token):
+    print(CLEAR)
+    print(f"{CYAN}Search for a track:{RESET}")
+    query = input("> ")
+    
+    tracks = search_tracks(access_token, query)
+    
+    if not tracks:
+        print_colored("No tracks found", "yellow")
+        return
+    
+    print(f"\n{GREEN}Results:{RESET}")
+    displayed_tracks = tracks[:10]
+    
+    for i, track in enumerate(displayed_tracks, 1):
+        name = track['name']
+        artist = track['artists'][0]['name']
+        album = track['album']['name']
+        print(f"{i}. {name} - {artist} · {album}")
+
+    while True:
+        print(f"\n{YELLOW}Enter track number to play (or 0 to cancel):{RESET}")
+        
+        try:
+            choice = int(input("> "))
+            
+            if choice == 0:
+                return  
+            
+            if 1 <= choice <= len(displayed_tracks):
+                selected = displayed_tracks[choice - 1]
+                track_uri = selected['uri']
+                play_track(access_token, track_uri)
+                return 
+            else:
+                print_colored(f"Invalid! Enter 1-{len(displayed_tracks)} or 0 to cancel", "red")
+              
+        except ValueError:
+            print_colored("Please enter a number!", "red")

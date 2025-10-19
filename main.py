@@ -29,7 +29,8 @@ def main():
             skip_to_next(access_token)
         elif command == 'b':
             skip_to_previous(access_token)
-
+        elif command == 's':
+            search_mode(access_token)
         time.sleep(1)
 
 
