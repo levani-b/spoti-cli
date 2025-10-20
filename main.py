@@ -12,12 +12,11 @@ def main():
     access_token = tokens['access_token']
 
     while True:
-        print(CLEAR, end = " ")
+        print(CLEAR, end = "")
 
         current = get_current_track(access_token)
+        print_full_ui(current, menu_options)
 
-        print_track_info(current)
-        print_menu(menu_options)
 
         command = get_user_input()
 
@@ -31,7 +30,7 @@ def main():
             skip_to_previous(access_token)
         elif command == 's':
             search_mode(access_token)
-        time.sleep(1)
+        time.sleep(0.2)
 
 
 if __name__ == "__main__":

@@ -157,7 +157,6 @@ def authenticate():
 
     if tokens:
         if not is_token_expired(tokens):
-            print('Authenticated')
             return tokens
         else:
             print("Token expired, refreshing...")

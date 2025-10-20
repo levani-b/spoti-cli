@@ -73,23 +73,6 @@ def hide_cursor():
 def show_cursor():
     print(SHOW_CURSOR, end='')
 
-
-def print_track_info(track_data):
-    album_name = track_data["item"]["album"]["name"]
-    track_name = track_data["item"]["name"]
-    artist_name = track_data["item"]["artists"][0]["name"]
-
-    print('\nNow Playing:')
-    print(f"> {track_name}")
-    print(f'{artist_name} -> {album_name}')
-
-
-def print_menu(options):
-    print("\n" + "─" * 40)
-    for key, description in options.items():
-        print(f"[{key.upper()}] {description}")
-    print("─" * 40)
-
 def get_user_input():
     command = input("\nEnter command: ").lower().strip()
     return command[0] if command else ''
@@ -134,3 +117,36 @@ def search_mode(access_token):
               
         except ValueError:
             print_colored("Please enter a number!", "red")
+
+def print_full_ui(track_data, menu_options):
+    width = 40
+
+    is_playing = track_data.get('is_playing', False)
+
+    print("╔" + "═" * width + "╗")
+    print("║" + "spoti-cli".center(width) + "║")
+    print("╠" + "═" * width + "╣")
+
+    if track_data:
+        name = track_data["item"]["name"]
+        artist = track_data["item"]["artists"][0]["name"]
+        album = track_data["item"]["album"]["name"]
+        
+        print("║" + " " * width + "║")
+        print("║" + "  Now Playing:".ljust(width) + "║")
+        print("║" + f"  {'▶' if is_playing else '⏸'} {name}".ljust(width) + "║")
+        print("║" + f"    {artist} · {album}".ljust(width) + "║")
+        print("║" + " " * width + "║")
+
+    else:
+        print("║" + " " * width + "║")
+        print("║" + "  No track playing".ljust(width) + "║")
+        print("║" + " " * width + "║")
+    
+    print("╠" + "═" * width + "╣")
+
+    for key, description in menu_options.items():
+        text = f"  [{key.upper()}] {description}"
+        print("║" + text.ljust(width) + "║")
+    
+    print("╚" + "═" * width + "╝")

@@ -43,7 +43,6 @@ def get_current_track(token):
         return None
     
     if data is None: 
-        print("No track currently playing")
         return None
     
     return data
