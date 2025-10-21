@@ -1,4 +1,5 @@
 from spotify_api import search_tracks, play_track
+from utils import ms_to_min_sec
 
 # ANSI escape codes
 CLEAR = "\033[2J\033[H"
@@ -131,11 +132,24 @@ def print_full_ui(track_data, menu_options):
         name = track_data["item"]["name"]
         artist = track_data["item"]["artists"][0]["name"]
         album = track_data["item"]["album"]["name"]
-        
+
+        progress_ms = track_data["progress_ms"]
+        duration_ms = track_data["item"]["duration_ms"]
+
+        curr_progress = ms_to_min_sec(progress_ms)
+        duration = ms_to_min_sec(duration_ms)
+        progress = progress_ms / duration_ms
+
+        bar_width = width - 20  
+        filled = int(bar_width * progress)
+        bar = "█" * filled + "░" * (bar_width - filled)
+
+
         print("║" + " " * width + "║")
         print("║" + "  Now Playing:".ljust(width) + "║")
         print("║" + f"  {'▶' if is_playing else '⏸'} {name}".ljust(width) + "║")
         print("║" + f"    {artist} · {album}".ljust(width) + "║")
+        print("║" + f"    {bar}  {curr_progress}/{duration}".ljust(width) + "║")
         print("║" + " " * width + "║")
 
     else:
