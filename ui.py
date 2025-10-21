@@ -122,13 +122,13 @@ def search_mode(access_token):
 def print_full_ui(track_data, menu_options):
     width = 40
 
-    is_playing = track_data.get('is_playing', False)
 
     print("╔" + "═" * width + "╗")
     print("║" + "spoti-cli".center(width) + "║")
     print("╠" + "═" * width + "╣")
 
     if track_data:
+        is_playing = track_data.get('is_playing', False)
         name = track_data["item"]["name"]
         artist = track_data["item"]["artists"][0]["name"]
         album = track_data["item"]["album"]["name"]
