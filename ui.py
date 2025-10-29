@@ -1,5 +1,8 @@
 from spotify_api import search_tracks, play_track
 from utils import ms_to_min_sec
+from PIL import Image, ImageEnhance
+import re
+
 
 # ANSI escape codes
 CLEAR = "\033[2J\033[H"
@@ -32,7 +35,6 @@ menu_options = {
     'q': 'Quit',
 
 }
-
 
 def clear_screen():
     print(CLEAR, end='')
@@ -119,13 +121,70 @@ def search_mode(access_token):
         except ValueError:
             print_colored("Please enter a number!", "red")
 
-def print_full_ui(track_data, menu_options):
+
+def draw_album(img_path):
+    try:
+        img = Image.open(img_path).convert("RGB")
+    except:
+        return []  
+    
+    MAX_WIDTH = 50 
+    MAX_HEIGHT = 30
+    
+    original_width, original_height = img.size
+    aspect_ratio = original_width / original_height
+    
+    if aspect_ratio > (MAX_WIDTH / MAX_HEIGHT):
+        new_width = MAX_WIDTH
+        new_height = int(new_width / aspect_ratio)
+    else:
+        new_height = MAX_HEIGHT
+        new_width = int(new_height * aspect_ratio)
+    
+    resized_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+    enhancer = ImageEnhance.Sharpness(resized_img)
+    resized_img = enhancer.enhance(1.5)
+    
+    pixels = resized_img.load()
+    width, height = resized_img.size
+    
+    lines = []
+    for y in range(0, height, 2):
+        row = ""
+        for x in range(width):
+            top_r, top_g, top_b = pixels[x, y]
+            
+            if y + 1 < height:
+                bottom_r, bottom_g, bottom_b = pixels[x, y + 1]
+            else:
+                bottom_r, bottom_g, bottom_b = top_r, top_g, top_b
+            
+            row += f"\033[38;2;{top_r};{top_g};{top_b}m\033[48;2;{bottom_r};{bottom_g};{bottom_b}m▀"
+        
+        row += RESET
+        lines.append(row)
+    
+    return lines
+
+def print_full_ui(track_data, menu_options, album_art_lines = None):
     width = 40
+    ansi_re = re.compile(r'\x1b\[[0-9;]*m')
 
 
     print("╔" + "═" * width + "╗")
-    print("║" + "spoti-cli".center(width) + "║")
+    print("║" + "spoti-cli".center(width) + "║" )
     print("╠" + "═" * width + "╣")
+
+    if album_art_lines:
+        for line in album_art_lines:
+            visible = ansi_re.sub('', line)
+            visible_len = len(visible)
+            if visible_len > width:
+                visible_len = width
+            left_pad = max((width - visible_len) // 2, 0)
+            right_pad = max(width - visible_len - left_pad, 0)
+            print("║" + (" " * left_pad) + line + (" " * right_pad) + "║")
+        print("╠" + "═" * width + "╣")
 
     if track_data:
         is_playing = track_data.get('is_playing', False)
