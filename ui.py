@@ -64,22 +64,18 @@ def print_styled(text, style):
     print(f'{style_code}{text}{RESET}')
 
 
-def move_cursor(row, col):
-    print(f"\033[{row};{col}H", end='')
+# def move_cursor(row, col):
+#     print(f"\033[{row};{col}H", end='')
 
 
-def hide_cursor():
-    print(HIDE_CURSOR, end='')
+# def hide_cursor():
+#     print(HIDE_CURSOR, end='')
 
 
-def show_cursor():
-    print(SHOW_CURSOR, end='')
+# def show_cursor():
+#     print(SHOW_CURSOR, end='')
 
-def get_user_input():
-    command = input("\nEnter command: ").lower().strip()
-    return command[0] if command else ''
 
-    
 def search_mode(access_token):
     print(CLEAR)
     print(f"{CYAN}Search for a track:{RESET}")
@@ -165,14 +161,15 @@ def draw_album(img_path):
     
     return lines
 
-def print_full_ui(track_data, menu_options, album_art_lines = None):
+
+def print_full_ui(track_data, menu_options, album_art_lines=None):
     width = 40
     ansi_re = re.compile(r'\x1b\[[0-9;]*m')
-
+    
     print("╔" + "═" * width + "╗")
-    print("║" + "spoti-cli".center(width) + "║" )
+    print("║" + "spoti-cli".center(width) + "║")
     print("╠" + "═" * width + "╣")
-
+    
     if album_art_lines:
         for line in album_art_lines:
             visible = ansi_re.sub('', line)
@@ -183,7 +180,7 @@ def print_full_ui(track_data, menu_options, album_art_lines = None):
             right_pad = max(width - visible_len - left_pad, 0)
             print("║" + (" " * left_pad) + line + (" " * right_pad) + "║")
         print("╠" + "═" * width + "╣")
-
+    
     if track_data:
         is_playing = track_data.get('is_playing', False)
         name = truncate_text(track_data["item"]["name"], width - 2 - len(" ▶ "))
@@ -200,15 +197,12 @@ def print_full_ui(track_data, menu_options, album_art_lines = None):
         # bar_width = width - 20  
         # filled = int(bar_width * progress)
         # bar = "█" * filled + "░" * (bar_width - filled)
-
-
+        
         print("║" + " " * width + "║")
         print("║" + "  Now Playing:".ljust(width) + "║")
         print("║" + f"  {'▶' if is_playing else '⏸'} {name}".ljust(width) + "║")
         print("║" + f"    {artist} · {album}".ljust(width) + "║")
-        # print("║" + f"    {bar}  {curr_progress}/{duration}".ljust(width) + "║")
         print("║" + " " * width + "║")
-
     else:
         print("║" + " " * width + "║")
         print("║" + "  No track playing".ljust(width) + "║")
@@ -216,14 +210,12 @@ def print_full_ui(track_data, menu_options, album_art_lines = None):
     
     print("╠" + "═" * width + "╣")
     items = list(menu_options.values())
-
-    items = list(menu_options.values())
-
     for i in range(0, len(items), 2):
         left = items[i]
         right = items[i+1] if i+1 < len(items) else ""
-        
         text = f"  {left:<15}{right}"
         print("║" + text.ljust(width) + "║")
     
     print("╚" + "═" * width + "╝")
+    
+    print("\nEnter command: ", end='', flush=True)
