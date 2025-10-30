@@ -4,7 +4,7 @@ from spotify_auth import authenticate
 from spotify_api import *
 from ui import *
 from utils import ensure_spotify_running, download_album_art
-import time
+
 
 def main():
     ensure_spotify_running()
@@ -36,7 +36,7 @@ def main():
                 except:
                     pass
             
-            print_full_ui(current, menu_options, album_art_lines)
+            print_full_ui(current, album_art_lines)
             last_track_id = current_track_id
         
         if select.select([sys.stdin], [], [], 2)[0]:

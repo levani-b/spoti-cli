@@ -162,8 +162,8 @@ def draw_album(img_path):
     return lines
 
 
-def print_full_ui(track_data, menu_options, album_art_lines=None):
-    width = 40
+def print_full_ui(track_data, album_art_lines=None):
+    width = 50
     ansi_re = re.compile(r'\x1b\[[0-9;]*m')
     
     print("╔" + "═" * width + "╗")
@@ -183,9 +183,12 @@ def print_full_ui(track_data, menu_options, album_art_lines=None):
     
     if track_data:
         is_playing = track_data.get('is_playing', False)
-        name = truncate_text(track_data["item"]["name"], width - 2 - len(" ▶ "))
+        name = truncate_text(track_data["item"]["name"], width - 4)
         artist = track_data["item"]["artists"][0]["name"]
-        album = truncate_text(track_data["item"]["album"]["name"], 20)
+
+        used_space = 4 + len(artist) + 3
+        remaining_space = width - used_space
+        album = truncate_text(track_data["item"]["album"]["name"], remaining_space)
 
         # progress_ms = track_data["progress_ms"]
         # duration_ms = track_data["item"]["duration_ms"]
@@ -209,12 +212,8 @@ def print_full_ui(track_data, menu_options, album_art_lines=None):
         print("║" + " " * width + "║")
     
     print("╠" + "═" * width + "╣")
-    items = list(menu_options.values())
-    for i in range(0, len(items), 2):
-        left = items[i]
-        right = items[i+1] if i+1 < len(items) else ""
-        text = f"  {left:<15}{right}"
-        print("║" + text.ljust(width) + "║")
+    menu_text = "  [P]lay/Pause [N]ext [B]ack [S]earch [Q]uit"
+    print("║" + menu_text.ljust(width) + "║")
     
     print("╚" + "═" * width + "╝")
     
