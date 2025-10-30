@@ -1,5 +1,5 @@
 from spotify_api import search_tracks, play_track
-from utils import ms_to_min_sec
+from utils import ms_to_min_sec, truncate_text
 from PIL import Image, ImageEnhance
 import re
 
@@ -167,8 +167,9 @@ def draw_album(img_path):
     return lines
 
 def print_full_ui(track_data, menu_options, album_art_lines = None):
-    width = 40
+    width = 60
     ansi_re = re.compile(r'\x1b\[[0-9;]*m')
+    
 
 
     print("╔" + "═" * width + "╗")
@@ -188,9 +189,9 @@ def print_full_ui(track_data, menu_options, album_art_lines = None):
 
     if track_data:
         is_playing = track_data.get('is_playing', False)
-        name = track_data["item"]["name"]
-        artist = track_data["item"]["artists"][0]["name"]
-        album = track_data["item"]["album"]["name"]
+        name = truncate_text(track_data["item"]["name"], width - 2 - len(" ▶ "))
+        artist = truncate_text(track_data["item"]["artists"][0]["name"], 15)
+        album = truncate_text(track_data["item"]["album"]["name"], 45)
 
         progress_ms = track_data["progress_ms"]
         duration_ms = track_data["item"]["duration_ms"]

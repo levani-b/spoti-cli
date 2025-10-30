@@ -25,3 +25,7 @@ def download_album_art(url):
         return BytesIO(response.content)
     except:
         return None
+
+
+def truncate_text(text, max_len):
+    return text[:max_len-3] + '...' if len(text) > max_len else text
