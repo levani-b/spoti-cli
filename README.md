@@ -6,6 +6,16 @@ A command-line Spotify player with album art visualization.
 
 Control your Spotify playback from the terminal. Features include playback controls, track search, and album art display using ANSI pixel art.
 
+## Preview
+
+### Main Interface
+
+![Main Interface](preview/main.png)
+
+### Search
+
+![Search](preview/search.png)
+
 ## Requirements
 
 - Python 3.8 or higher
